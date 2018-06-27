@@ -1,2 +1,2 @@
 # supergoose
-Unit Testing APIs and Mongoose Models with SuperTest and Mockgoose
+Example App using SuperTest and Mockgoose for API &amp; Mongoose model testing
