@@ -1,6 +1,5 @@
 import Musician from '../../../src/models/musicians';
 import Band from '../../../src/models/bands';
-import Roadie from '../../../src/models/roadies';
 import testHelper from '../../../scripts/test-helper';
 
 afterEach(testHelper.afterEach);

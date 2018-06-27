@@ -1,7 +1,6 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import Musician from './../models/musicians.js';
 import Band from './../models/bands.js';
-import Roadie from './../models/roadies.js';
 
 const router = new Router();
 
