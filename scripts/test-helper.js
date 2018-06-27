@@ -14,7 +14,7 @@ export default {
       return mongoose.connect('mongodb://localhost/supergoose').catch(err => {
         console.log('already connected, no sweat', err);
       });
-    });
+    }).catch(console.error);
   },
   afterEach: () => mockgoose.helper.reset(),
 };
