@@ -1,75 +1,32 @@
 import Musician from '../../../src/models/musicians';
 import Band from '../../../src/models/bands';
-import testHelper from '../../../scripts/test-helper';
+import Roadie from '../../../src/models/roadies';
 
-afterEach(testHelper.afterEach);
-
-
-describe('musician + band', () => {
-
-  it('should create a musician that belongs to band', () => {
-
-    Band.create({name:'Foo Fighters'})
-      .then(band => {
-        Musician.create({name:'Dave Grohl', band: band._id})
-          .then(m => {
-            Musician
-              .findById(m._id)
-              .populate('band')
-              .exec()
-              .then(mu => {
-                expect(mu.band.name).toBe('Foo Fighters');
-              });
-          });
-      });
-  });
-
-  it('should do musician + band - async style', async () => {
-
-    const fooFighters = await Band.create({name:'Foo Fighters'});
-
-    const dave = await Musician.create({name: 'Dave Grohl', band: fooFighters._id});
-
-    const popDave = await Musician.findById(dave._id).populate('band').exec();
-
-    expect(popDave.band.name).toBe('Foo Fighters');
-  });
-});
-/*
 describe('Band model', () => {
 
   it('should be defined', () => {
     expect(Band).toBeDefined();
   });
 
-  it('should create', () => {
-    return Band.create({
-      name: 'Spinal Tap',
-    }).then(band => {
-      expect(band.name).toBe('Spinal Tap');
-    }).catch(err => fail(err));
-  });
+  it('should create', async () => {
 
-  it('should create async', async () => {
-    
     const band = await Band.create({name: 'Spinal Tap'});
 
     expect(band.name).toBe('Spinal Tap');
 
   });
 
-  it('should get one', () => {
+  it('should get one', async () => {
 
     const rawBand = {
       name: 'Spinal Tap',
     };
 
-    return Band.create(rawBand).then(band => {
+    const band = await Band.create(rawBand);
 
-      return Band.findById(band._id).then(found => {
-        expect(found.name).toBe(rawBand.name);
-      });
-    });
+    const foundBand = await Band.findById(band._id);
+
+    expect(foundBand.name).toEqual(band.name);
   });
 
   it('should track creations when getting all - async/await style', async () => {
@@ -145,4 +102,34 @@ describe('Band with relationships', () => {
     });
   });
 });
-*/
+
+describe('musician + band', () => {
+
+  it('should create a musician that belongs to band', () => {
+
+    Band.create({name:'Foo Fighters'})
+      .then(band => {
+        Musician.create({name:'Dave Grohl', band: band._id})
+          .then(m => {
+            Musician
+              .findById(m._id)
+              .populate('band')
+              .exec()
+              .then(mu => {
+                expect(mu.band.name).toBe('Foo Fighters');
+              });
+          });
+      });
+  });
+
+  it('should do musician + band - async style', async () => {
+
+    const fooFighters = await Band.create({name:'Foo Fighters'});
+
+    const dave = await Musician.create({name: 'Dave Grohl', band: fooFighters._id});
+
+    const popDave = await Musician.findById(dave._id).populate('band').exec();
+
+    expect(popDave.band.name).toBe('Foo Fighters');
+  });
+});

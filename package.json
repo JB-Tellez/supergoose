@@ -26,6 +26,8 @@
     "supertest": "^3.1.0"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>scripts/setupTests.js"
+    "setupTestFrameworkScriptFile": "<rootDir>scripts/setupTests.js",
+    "globalSetup":"<rootDir>scripts/globalSetup.js",
+    "globalTeardown":"<rootDir>scripts/globalTeardown.js"
   }
 }

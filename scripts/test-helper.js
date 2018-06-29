@@ -16,5 +16,7 @@ export default {
       });
     }).catch(console.error);
   },
-  afterEach: () => mockgoose.helper.reset(),
+  
 };
+
+afterEach(() => mockgoose.helper.reset());

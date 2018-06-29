@@ -1,12 +1,9 @@
 import supertest from 'supertest';
-import testHelper from '../../scripts/test-helper';
 
 const { server } = require('../../src/app.js');
 
 const mockRequest = supertest(server);
 const API_STUB = '/api/v1/';
-
-afterEach(testHelper.afterEach);
 
 describe('app module', () => {
 
@@ -18,22 +15,21 @@ describe('app module', () => {
     expect(server);
   });
 
-  it('should get [] for initial request to GET bands', () => {
+  it('should get [] for initial request to GET bands', async () => {
 
-    return mockRequest
-      .get(API_STUB + '/bands')
-      .then(results => {
-        expect(JSON.parse(results.text)).toEqual([]);
-      }).catch(err => fail(err));
+    const response = await mockRequest.get(API_STUB + '/bands');
+
+    expect(JSON.parse(response.text)).toEqual([]);
+
   });
 
-  it('should get populated list after creating', () => {
+  it('should get populated list after creating', async () => {
 
-    return mockRequest
-      .get(API_STUB + '/bands')
-      .then(results => JSON.parse(results.text))
-      .then(bands => expect(bands.length).toBe(0))
-      .catch(fail);
+    await mockRequest.post(API_STUB + '/bands').send({name : 'The Who'});
+
+    const response = await mockRequest.get(API_STUB + '/bands');
+
+    expect(JSON.parse(response.text).length).toBe(1);
   });
 
   it('should get error 404 if unfound id', () => {

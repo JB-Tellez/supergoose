@@ -34,7 +34,8 @@ export default (req, res, next) => {
     // }).send(401);
 
     // For our actual purposes, though, send back a JSON formatted error object through our middleware
-    next({status:401,statusMessage:'Unauthorized',message:'Invalid User ID/Password'});
+    // next({status:401,statusMessage:'Unauthorized',message:'Invalid User ID/Password'});
+    next('why???');
   };
 
   // Try to authenticate -- parse out the headers and do some work!
@@ -42,6 +43,8 @@ export default (req, res, next) => {
     let auth = {};
     let authHeader = req.headers.authorization;
 
+    console.log(authHeader);
+    
     if(!authHeader) {
       return getAuth();
     }
