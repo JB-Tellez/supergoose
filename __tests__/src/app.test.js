@@ -1,8 +1,10 @@
 import supertest from 'supertest';
 
-const { server } = require('../../src/app.js');
+const {
+  app,
+} = require('../../src/app.js');
 
-const mockRequest = supertest(server);
+const mockRequest = supertest(app);
 const API_STUB = '/api/v1/';
 
 describe('app module', () => {
@@ -11,8 +13,8 @@ describe('app module', () => {
     expect(supertest);
   });
 
-  it('server should exist', () => {
-    expect(server);
+  it('app should exist', () => {
+    expect(app);
   });
 
   it('should get [] for initial request to GET bands', async () => {
@@ -20,12 +22,13 @@ describe('app module', () => {
     const response = await mockRequest.get(API_STUB + '/bands');
 
     expect(JSON.parse(response.text)).toEqual([]);
-
   });
 
   it('should get populated list after creating', async () => {
 
-    await mockRequest.post(API_STUB + '/bands').send({name : 'The Who'});
+    await mockRequest.post(API_STUB + '/bands').send({
+      name: 'The Who',
+    });
 
     const response = await mockRequest.get(API_STUB + '/bands');
 
@@ -34,7 +37,7 @@ describe('app module', () => {
 
   it('should get error 404 if unfound id', () => {
 
-    
+
 
   });
 });

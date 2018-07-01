@@ -12,7 +12,7 @@ app.use(authRouter);
 app.use('/api/v1', router);
 
 app.use(notFound);
-// app.use(errorHandler);
+app.use(errorHandler);
 
 
 module.exports = {
@@ -21,5 +21,5 @@ module.exports = {
     app.listen(port, () => console.log('Listening on port', port));
   },
   stop: () => app.close(),
-  server: app,
+  app,
 };
