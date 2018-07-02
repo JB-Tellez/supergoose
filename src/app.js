@@ -1,19 +1,23 @@
 import express from 'express';
-import router from './api/api.js';
-import errorHandler from './middleware/error.js';
-import notFound from './middleware/404.js';
-import authRouter from './auth/router.js';
+import bandsRouter from './bands/router';
+import musiciansRouter from './musicians/router';
+import roadiesRouter from './roadies/router';
+import errorHandler from './middleware/error';
+import notFound from './middleware/404';
+import authRouter from './auth/router';
 
 const app = express();
 
 app.use(express.json());
 
 app.use(authRouter);
-app.use('/api/v1', router);
+
+app.use('/api/v1/bands', bandsRouter);
+app.use('/api/v1/musicians', musiciansRouter);
+app.use('/api/v1/roadies', roadiesRouter);
 
 app.use(notFound);
 app.use(errorHandler);
-
 
 module.exports = {
 

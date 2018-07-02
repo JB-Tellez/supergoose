@@ -19,7 +19,7 @@ export default {
   
 };
 
-afterEach(() => {
+afterEach((done) => {
   // console.log('after each');
-  return mockgoose.helper.reset();
+  mockgoose.helper.reset().then(done);
 });

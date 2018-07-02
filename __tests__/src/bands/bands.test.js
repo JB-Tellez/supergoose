@@ -1,6 +1,6 @@
-import Musician from '../../../src/models/musicians';
-import Band from '../../../src/models/bands';
-import Roadie from '../../../src/models/roadies';
+import Musician from '../../../src/musicians/model';
+import Band from '../../../src/bands/model';
+import Roadie from '../../../src/roadies/model';
 
 describe('Band model', () => {
 

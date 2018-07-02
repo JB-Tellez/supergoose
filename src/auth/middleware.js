@@ -4,15 +4,27 @@ import User from './model.js';
 
 export default (req, res, next) => {
 
+  let authorize = (token) => {
+    // Given a token, check with the User model to see if its valid
+    User.authorize(token)
+      .then(user => {
+        // We will always get back a "user" from mongo ... although it might be real and it might be null
+        if(!user) { getAuth(); }
+
+        // Given a real user that must mean that our token was good. Let the user through.
+        // in larger systems, you might want to attach an ACL or permissions to the req.user object here.
+        else { next(); }
+      })
+      .catch(next);
+  };
+
   let authenticate = (auth) => {
     // Validate the user using the model's authenticate method
     User.authenticate(auth)
     // We will always get back a "user" from mongo ... although it might be real and it might be null
       .then(user => {
         // If it's null, go to getAuth() ... which should return an error or a login page
-        if (!user) {
-          getAuth();
-        }
+        if (!user) { getAuth(); }
         // We must have a good user.  Generate a token and jack that onto the req object and move on
         // we could alternatively put the whole user instance on req.user if there's need for it later?
         else {
@@ -27,15 +39,12 @@ export default (req, res, next) => {
 
   // If we're not authenticated either show an error or pop a window
   let getAuth = () => {
-    // Sending this out, will show the annoying pop-up window in the browser
-    // While useless IRL, it's fun to play with this and see how you can login with a browser
     // res.set({
     //   'WWW-Authenticate': 'Basic realm="Super Secret Area"'
     // }).send(401);
 
-    // For our actual purposes, though, send back a JSON formatted error object through our middleware
-    // next({status:401,statusMessage:'Unauthorized',message:'Invalid User ID/Password'});
-    next('why???');
+    // Send back a JSON formatted error object through our middleware
+    next({status:401,statusMessage:'Unauthorized',message:'Invalid User ID/Password'});
   };
 
   // Try to authenticate -- parse out the headers and do some work!
@@ -43,16 +52,14 @@ export default (req, res, next) => {
     let auth = {};
     let authHeader = req.headers.authorization;
 
-    console.log(authHeader);
-    
     if(!authHeader) {
       return getAuth();
     }
 
     // BASIC Auth
     if(authHeader.match(/basic/i)) {
-      // authHeader will have something like this in it:
-      //   Basic ZnJlZDpzYW1wbGU=
+      // authHeader will have a base64 encoded auth string in it
+      //   i.e. Basic ZnJlZDpzYW1wbGU=
 
       // Break that apart ...
       let base64Header = authHeader.replace(/Basic\s+/i, ''); // ZnJlZDpzYW1wbGU=
@@ -64,10 +71,15 @@ export default (req, res, next) => {
       // Start the authentication train
       authenticate(auth);
     }
+    else if(authHeader.match(/bearer/i)) {
+      // i.e. Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI
+      let token = authHeader.replace(/bearer\s+/i, '');
+
+      authorize(token);
+    }
   } catch(e) {
     next(e);
   }
 
 };
-
 

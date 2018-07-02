@@ -1,4 +1,4 @@
-import Roadie from '../../../src/models/roadies';
+import Roadie from '../../../src/roadies/model';
 
 describe('Roadie model', () => {
 

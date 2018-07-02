@@ -1,4 +1,4 @@
-import Musician from '../../../src/models/musicians';
+import Musician from '../../../src/musicians/model';
 
 describe('Musicans model', () => {
 
