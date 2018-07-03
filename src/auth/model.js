@@ -19,7 +19,7 @@ userSchema.pre('save', function(next) {
       next();
     })
     // In the event of an error, do not save, but throw it instead
-    .catch( error => {throw error;} );
+    .catch( error => { throw error; });
 });
 
 // If we got a user/password, compare them to the hashed password
@@ -28,7 +28,18 @@ userSchema.statics.authenticate = function(auth) {
   let query = {username:auth.username};
   return this.findOne(query)
     .then(user => user && user.comparePassword(auth.password))
-    .catch(error => error);
+    .catch(error => { throw error; });
+};
+
+userSchema.statics.authorize = function(token) {
+  let parsedToken = jwt.verify(token, process.env.SECRET || 'changeit');
+  let query = {_id:parsedToken.id};
+  return this.findOne(query)
+    .then(user => {
+      // looked up their role and then all capabilities
+      return user;
+    })
+    .catch(error => { throw error; });
 };
 
 userSchema.statics.authorize = function(token) {

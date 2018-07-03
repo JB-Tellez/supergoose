@@ -17,6 +17,7 @@ app.use('/api/v1/musicians', musiciansRouter);
 app.use('/api/v1/roadies', roadiesRouter);
 
 app.use(notFound);
+
 app.use(errorHandler);
 
 module.exports = {

@@ -23,7 +23,9 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/:id', (req, res, next) => {
-  Band.findByIdAndUpdate(req.params.id, req.body)
+
+  Band.findByIdAndUpdate(req.params.id, req.body, {new : true})
+
     .then(band => res.send(band))
     .catch(next);
 });
